@@ -4,8 +4,7 @@ import RetroBoard  from './components/RetroBoard.jsx';
 const App = () => {
   return (
     <main className="content row">
-      <RetroBoard 
-      />
+      <RetroBoard />
     </main>
   )
 }

@@ -1,18 +1,22 @@
-import React, { createContext, useState, useEffect } from 'react';  
+import { createContext, useState, useEffect } from 'react';  
 import PropTypes from 'prop-types';  
 
 export const BoardContext = createContext();  
 
 const LOCAL_STORAGE_KEY = 'retrospectiveBoardState';  
 
+const CATEGORIES = ['wentWell', 'toImprove', 'actionItems'];  
+
 export const BoardProvider = ({ children }) => {  
   const [boardState, setBoardState] = useState(() => {  
     const savedState = localStorage.getItem(LOCAL_STORAGE_KEY);  
-    return savedState ? JSON.parse(savedState) : {  
-      wentWell: [],  
-      toImprove: [],  
-      actionItems: []  
-    };  
+    return savedState  
+      ? JSON.parse(savedState)  
+      : {  
+          wentWell: [],  
+          toImprove: [],  
+          actionItems: [],  
+        };  
   });  
 
   useEffect(() => {  
@@ -20,7 +24,7 @@ export const BoardProvider = ({ children }) => {
   }, [boardState]);  
 
   const addItem = (category) => {  
-    if (!['wentWell', 'toImprove', 'actionItems'].includes(category)) {  
+    if (!CATEGORIES.includes(category)) {  
       console.error(`Invalid category: ${category}`);  
       return;  
     }  
@@ -28,7 +32,7 @@ export const BoardProvider = ({ children }) => {
     const newItem = { id: Date.now(), text: '', likes: 0 };  
     setBoardState((prevState) => ({  
       ...prevState,  
-      [category]: [...prevState[category], newItem]  
+      [category]: [...prevState[category], newItem],  
     }));  
   };  
 
@@ -62,23 +66,33 @@ export const BoardProvider = ({ children }) => {
     setBoardState((prevState) => {  
       const newState = { ...prevState };  
       let itemToMove;  
-      let fromCategory, toCategory;  
+      let fromCategory, toCategoryIdx;  
 
-      if (direction === 'left') {  
-        fromCategory = ['toImprove', 'actionItems'].find((cat) =>  
-          prevState[cat].some((item) => item.id === itemId)  
-        );  
-        toCategory = fromCategory === 'toImprove' ? 'wentWell' : 'toImprove';  
-      } else {  
-        fromCategory = ['wentWell', 'toImprove'].find((cat) =>  
-          prevState[cat].some((item) => item.id === itemId)  
-        );  
-        toCategory = fromCategory === 'wentWell' ? 'toImprove' : 'actionItems';  
+      // Find the category containing the item  
+      for (let i = 0; i < CATEGORIES.length; i++) {  
+        const category = CATEGORIES[i];  
+        const items = prevState[category];  
+        const itemIndex = items.findIndex((item) => item.id === itemId);  
+
+        if (itemIndex > -1) {  
+          itemToMove = items[itemIndex];  
+          fromCategory = category;  
+
+          if (direction === 'right') {  
+            toCategoryIdx = (i + 1) % CATEGORIES.length;  
+          } else if (direction === 'left') {  
+            toCategoryIdx = (i - 1 + CATEGORIES.length) % CATEGORIES.length;  
+          }  
+
+          newState[fromCategory] = items.filter((item) => item.id !== itemId);  
+          break;  
+        }  
       }  
 
-      itemToMove = newState[fromCategory].find((item) => item.id === itemId);  
-      newState[fromCategory] = newState[fromCategory].filter((item) => item.id !== itemId);  
-      newState[toCategory] = [...newState[toCategory], itemToMove];  
+      if (itemToMove) {  
+        const toCategory = CATEGORIES[toCategoryIdx];  
+        newState[toCategory] = [...newState[toCategory], itemToMove];  
+      }  
 
       return newState;  
     });  
@@ -92,5 +106,5 @@ export const BoardProvider = ({ children }) => {
 };  
 
 BoardProvider.propTypes = {  
-  children: PropTypes.node.isRequired  
+  children: PropTypes.node.isRequired,  
 };
