@@ -2,7 +2,6 @@
   "name": "retro-board-project",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://megpen97.github.io/Retro-Board-Project/",
   "type": "module",
   "scripts": {
     "dev": "vite",
