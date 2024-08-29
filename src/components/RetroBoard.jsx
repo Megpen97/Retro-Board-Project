@@ -15,7 +15,7 @@ const RetroBoard = () => {
         <div className="RetroApp row">
           <div className="RetroCategory RetroCategory-1">
             <Category 
-              title="Went Well" 
+              title="New/Not Started" 
               items={boardState.wentWell}
               categoryKey="wentWell"
             />
@@ -23,14 +23,14 @@ const RetroBoard = () => {
 
           <div className="RetroCategory RetroCategory-2">
             <Category 
-              title="To Improve" 
+              title="In Progress" 
               items={boardState.toImprove}
               categoryKey="toImprove"  />
           </div>
 
           <div className="RetroCategory RetroCategory-3">
             <Category 
-              title="Action Items" 
+              title="Complete" 
               items={boardState.actionItems}
               categoryKey="actionItems"  />
             
