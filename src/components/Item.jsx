@@ -2,6 +2,7 @@ import './RetroBoard.css';
 import { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { BoardContext } from '../contexts/BoardContext';
+import { FaTrash } from 'react-icons/fa';
 
 const Item = ({ item }) => {
 
@@ -12,13 +13,6 @@ const Item = ({ item }) => {
     return (
         <>
             <div className="RetroCard" aria-label="Retro card">
-                <input
-                    type='text'
-                    value={item.text}
-                    onChange={handleTextChange}
-                    placeholder='Enter text here'
-                />
-
                 <div className="button-group">
                     <button
                     type="button"
@@ -28,14 +22,13 @@ const Item = ({ item }) => {
                     >
                         &#10094;
                     </button>
-                    <button
-                    type="button"
-                    className="button button-delete"
-                    title="Delete"
-                    onClick={() => deleteItem(item.id)}
-                    >
-                        Delete
-                    </button>                  
+                    <input
+                    type='text'
+                    value={item.text}
+                    onChange={handleTextChange}
+                    placeholder='Enter text here'
+                    className='form-control'
+                    />          
                     <button
                         type="button"
                         className="button button-right"
@@ -45,6 +38,14 @@ const Item = ({ item }) => {
                         &#10095;
                     </button>
                 </div>
+                <button
+                    type="button"
+                    className="button button-delete"
+                    title="Delete"
+                    onClick={() => deleteItem(item.id)}
+                    >
+                        <FaTrash />
+                    </button> 
 
             </div>
         </>

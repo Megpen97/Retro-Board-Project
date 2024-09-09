@@ -93,17 +93,17 @@
     border-radius: 5px;
   }
   .RetroCategory-1 .RetroCard {
-    background-color: #019588;
+    background-color: #c0c0c0;
   }
   .RetroCategory-2 .RetroCard {
-    background-color: #e91e63;
+    background-color: #a1c79e;
   }
   .RetroCategory-3 .RetroCard {
-    background-color: #9c28b0;
+    background-color: #6b6b9f;
   }
   .RetroCard .button {
     background: transparent;
-    font-size: 0.75rem;
+    font-size: 1.2rem;
     padding: 0.25rem;
   }
   .RetroCard .button:hover {
