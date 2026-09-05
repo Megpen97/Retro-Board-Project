@@ -1,11 +1,9 @@
-import { createContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { BoardContext } from './BoardContext';
 import { CATEGORIES } from '../boardColumns';
 
-export const BoardContext = createContext();
-
 const LOCAL_STORAGE_KEY = 'retrospectiveBoardState';
-
 const emptyBoard = () =>
   CATEGORIES.reduce((board, category) => ({ ...board, [category]: [] }), {});
 
