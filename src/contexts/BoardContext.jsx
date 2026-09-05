@@ -1,110 +1,111 @@
-import { createContext, useState, useEffect } from 'react';  
-import PropTypes from 'prop-types';  
+import { createContext, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { CATEGORIES } from '../boardColumns';
 
-export const BoardContext = createContext();  
+export const BoardContext = createContext();
 
-const LOCAL_STORAGE_KEY = 'retrospectiveBoardState';  
+const LOCAL_STORAGE_KEY = 'retrospectiveBoardState';
 
-const CATEGORIES = ['wentWell', 'toImprove', 'actionItems'];  
+const emptyBoard = () =>
+  CATEGORIES.reduce((board, category) => ({ ...board, [category]: [] }), {});
 
-export const BoardProvider = ({ children }) => {  
-  const [boardState, setBoardState] = useState(() => {  
-    const savedState = localStorage.getItem(LOCAL_STORAGE_KEY);  
-    return savedState  
-      ? JSON.parse(savedState)  
-      : {  
-          wentWell: [],  
-          toImprove: [],  
-          actionItems: [],  
-        };  
-  });  
+const loadBoard = () => {
+  try {
+    const saved = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+    if (!saved || typeof saved !== 'object') return emptyBoard();
 
-  useEffect(() => {  
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(boardState));  
-  }, [boardState]);  
+    return CATEGORIES.reduce(
+      (board, category) => ({
+        ...board,
+        [category]: Array.isArray(saved[category]) ? saved[category] : [],
+      }),
+      {}
+    );
+  } catch {
+    return emptyBoard();
+  }
+};
 
-  const addItem = (category) => {  
-    if (!CATEGORIES.includes(category)) {  
-      console.error(`Invalid category: ${category}`);  
-      return;  
-    }  
+export const BoardProvider = ({ children }) => {
+  const [boardState, setBoardState] = useState(loadBoard);
 
-    const newItem = { id: Date.now(), text: '', likes: 0 };  
-    setBoardState((prevState) => ({  
-      ...prevState,  
-      [category]: [...prevState[category], newItem],  
-    }));  
-  };  
+  useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(boardState));
+  }, [boardState]);
 
-  const updateItemText = (itemId, newText) => {  
-    setBoardState((prevState) => {  
-      const newState = { ...prevState };  
-      for (let category in newState) {  
-        const items = newState[category];  
-        const itemIndex = items.findIndex((item) => item.id === itemId);  
-        if (itemIndex > -1) {  
-          items[itemIndex].text = newText;  
-          break;  
-        }  
-      }  
-      return newState;  
-    });  
-  };  
+  const addItem = (category) => {
+    if (!CATEGORIES.includes(category)) {
+      console.error(`Invalid category: ${category}`);
+      return;
+    }
 
-  const deleteItem = (itemId) => {  
-    setBoardState((prevState) => {  
-      const newState = { ...prevState };  
-      for (let category in newState) {  
-        const items = newState[category];  
-        newState[category] = items.filter((item) => item.id !== itemId);  
-      }  
-      return newState;  
-    });  
-  };  
+    const newItem = { id: Date.now(), text: '', likes: 0 };
+    setBoardState((prevState) => ({
+      ...prevState,
+      [category]: [...prevState[category], newItem],
+    }));
+  };
 
-  const moveItem = (itemId, direction) => {  
-    setBoardState((prevState) => {  
-      const newState = { ...prevState };  
-      let itemToMove;  
-      let fromCategory, toCategoryIdx;  
+  const updateItemText = (itemId, newText) => {
+    setBoardState((prevState) =>
+      CATEGORIES.reduce(
+        (newState, category) => ({
+          ...newState,
+          [category]: prevState[category].map((item) =>
+            item.id === itemId ? { ...item, text: newText } : item
+          ),
+        }),
+        {}
+      )
+    );
+  };
 
-      // Find the category containing the item  
-      for (let i = 0; i < CATEGORIES.length; i++) {  
-        const category = CATEGORIES[i];  
-        const items = prevState[category];  
-        const itemIndex = items.findIndex((item) => item.id === itemId);  
+  const deleteItem = (itemId) => {
+    setBoardState((prevState) =>
+      CATEGORIES.reduce(
+        (newState, category) => ({
+          ...newState,
+          [category]: prevState[category].filter((item) => item.id !== itemId),
+        }),
+        {}
+      )
+    );
+  };
 
-        if (itemIndex > -1) {  
-          itemToMove = items[itemIndex];  
-          fromCategory = category;  
 
-          if (direction === 'right') {  
-            toCategoryIdx = (i + 1) % CATEGORIES.length;  
-          } else if (direction === 'left') {  
-            toCategoryIdx = (i - 1 + CATEGORIES.length) % CATEGORIES.length;  
-          }  
+  const moveCard = (itemId, toCategory, toIndex) => {
+    setBoardState((prevState) => {
+      const fromCategory = CATEGORIES.find((category) =>
+        prevState[category].some((item) => item.id === itemId)
+      );
+      if (!fromCategory || !CATEGORIES.includes(toCategory)) return prevState;
 
-          newState[fromCategory] = items.filter((item) => item.id !== itemId);  
-          break;  
-        }  
-      }  
+      const item = prevState[fromCategory].find((entry) => entry.id === itemId);
+      const withoutItem = prevState[fromCategory].filter((entry) => entry.id !== itemId);
 
-      if (itemToMove) {  
-        const toCategory = CATEGORIES[toCategoryIdx];  
-        newState[toCategory] = [...newState[toCategory], itemToMove];  
-      }  
+      const target =
+        fromCategory === toCategory ? [...withoutItem] : [...prevState[toCategory]];
 
-      return newState;  
-    });  
-  };  
+      const index = toIndex >= 0 && toIndex <= target.length ? toIndex : target.length;
+      target.splice(index, 0, item);
 
-  return (  
-    <BoardContext.Provider value={{ boardState, addItem, updateItemText, deleteItem, moveItem }}>  
-      {children}  
-    </BoardContext.Provider>  
-  );  
-};  
+      return {
+        ...prevState,
+        [fromCategory]: withoutItem,
+        [toCategory]: target,
+      };
+    });
+  };
 
-BoardProvider.propTypes = {  
-  children: PropTypes.node.isRequired,  
+  return (
+    <BoardContext.Provider
+      value={{ boardState, addItem, updateItemText, deleteItem, moveCard }}
+    >
+      {children}
+    </BoardContext.Provider>
+  );
+};
+
+BoardProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };

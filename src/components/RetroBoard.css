@@ -1,156 +1,278 @@
+/* ==========================================================================
+   Retro Board
+   ========================================================================== */
 
-  
-  /* @import 'bootstrap/dist/css/bootstrap.css'; */
-  @import url(https://fonts.googleapis.com/css?family=Roboto);
-  body,
-  html {
-    padding: 0;
-    margin: 0;
-    font-family: "Roboto", sans-serif;
-    color: #555;
-    box-sizing: border-box;
-  }
-  *,
-  :after,
-  :before {
-    box-sizing: inherit;
-  }
-  .button {
-    display: inline-block;
-    border: 0;
-    font: inherit;
-    color: inherit;
-    cursor: pointer;
-  }
-  .button-default {
-    padding: 0.25rem;
-    background-color: #eee;
-  }
-  .button-default:active,
-  .button-default:focus,
-  .button-default:hover {
-    background-color: #ddd;
-  }
-  .button-group {
-    display: flex;
-    justify-content: space-between;
-  }
-  .textbox {
-    font: inherit;
-    color: inherit;
-  }
-  ::-webkit-input-placeholder {
-    color: inherit;
-    opacity: 0.65;
-  }
-  ::-moz-placeholder {
-    color: inherit;
-    opacity: 0.65;
-  }
-  :-ms-input-placeholder {
-    color: inherit;
-    opacity: 0.65;
-  }
-  :-moz-placeholder {
-    color: inherit;
-    opacity: 0.65;
-  }
-  .content {
-    max-width: 1200px;
-    padding: 0 0.25rem;
-    margin: auto;
-  }
-  .content.column {
-    max-width: 640px;
-  }
-  @media (min-width: 640px) {
-    .RetroApp {
-      display: flex;
-      justify-content: space-between;
-      margin: 0 -0.25rem;
-    }
-    .RetroApp.column {
-      flex-direction: column;
-    }
-  }
-  @media (min-width: 640px) {
-    .RetroCategory {
-      padding: 0 0.25rem;
-    }
-  }
-  .RetroCategory {
-    flex: 1 1;
-  }
-  .ButtonAdd {
-    width: 100%;
-    margin-bottom: 0.5rem;
-  }
-  .RetroCard {
-    color: #fff;
-    min-height: 4rem;
-    padding: 0.25rem;
-    margin-bottom: 0.5rem;
-    border-radius: 5px;
-  }
-  .RetroCategory-1 .RetroCard {
-    background-color: #c0c0c0;
-  }
-  .RetroCategory-2 .RetroCard {
-    background-color: #a1c79e;
-  }
-  .RetroCategory-3 .RetroCard {
-    background-color: #6b6b9f;
-  }
-  .RetroCard .button {
-    background: transparent;
-    font-size: 1.2rem;
-    padding: 0.25rem;
-  }
-  .RetroCard .button:hover {
+.RetroBoard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-4) var(--space-6);
+}
+
+.RetroBoard__header {
+  margin-bottom: var(--space-6);
+}
+
+.RetroBoard__title {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+}
+
+.RetroBoard__subtitle {
+  margin: var(--space-1) 0 0;
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+}
+
+/* --------------------------------------------------------------------------
+   Column grid
+   -------------------------------------------------------------------------- */
+
+.RetroBoard__columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-4);
+  align-items: start;
+}
+
+/* --------------------------------------------------------------------------
+   Column
+   -------------------------------------------------------------------------- */
+
+.RetroCategory {
+  --accent: var(--border-strong);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background-color: var(--surface-sunken);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  border-radius: var(--radius-lg);
+}
+
+.RetroCategory--notStarted { --accent: var(--accent-not-started); }
+.RetroCategory--inProgress { --accent: var(--accent-in-progress); }
+.RetroCategory--complete   { --accent: var(--accent-complete); }
+
+.RetroCategory__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.RetroCategory__title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-body);
+}
+
+.RetroCategory__count {
+  min-width: 1.5rem;
+  padding: 0 var(--space-2);
+  border-radius: 999px;
+  background-color: var(--accent);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.5rem;
+  text-align: center;
+}
+
+.RetroCategory__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.RetroCategory__empty {
+  padding: var(--space-5) var(--space-3);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   Add button
+   -------------------------------------------------------------------------- */
+
+.ButtonAdd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background-color: transparent;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: background-color var(--transition), color var(--transition),
+    border-color var(--transition);
+}
+
+.ButtonAdd:hover {
+  background-color: var(--surface-raised);
+  border-color: var(--border-strong);
+  color: var(--text-strong);
+}
+
+.ButtonAdd__plus {
+  font-size: 1.125rem;
+  line-height: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Card
+   -------------------------------------------------------------------------- */
+
+.RetroCard {
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-1);
+  background-color: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition), border-color var(--transition);
+}
+
+.RetroCard:hover,
+.RetroCard:focus-within {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+.RetroCard__body {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.RetroCard__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: var(--space-2) 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-strong);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+.RetroCard__input::placeholder {
+  color: var(--text-muted);
+}
+
+.RetroCard__input:focus-visible {
+  box-shadow: none;
+}
+
+/* --------------------------------------------------------------------------
+   Card controls
+   -------------------------------------------------------------------------- */
+
+.RetroCard__grip,
+.RetroCard__delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  opacity: 0;
+  transition: opacity var(--transition), background-color var(--transition),
+    color var(--transition);
+}
+
+.RetroCard__grip {
+  cursor: grab;
+  touch-action: none; /* stop the browser scrolling instead of dragging on touch */
+}
+
+.RetroCard__grip:active {
+  cursor: grabbing;
+}
+
+.RetroCard:hover .RetroCard__grip,
+.RetroCard:hover .RetroCard__delete,
+.RetroCard:focus-within .RetroCard__grip,
+.RetroCard:focus-within .RetroCard__delete,
+.RetroCard__grip:focus-visible,
+.RetroCard__delete:focus-visible {
+  opacity: 1;
+}
+
+.RetroCard__grip:hover {
+  background-color: var(--surface-sunken);
+  color: var(--text-strong);
+}
+
+.RetroCard__delete:hover {
+  background-color: rgba(225, 29, 72, 0.1);
+  color: var(--danger);
+}
+
+/* Touch devices have no hover, so the controls must always be visible. */
+@media (hover: none) {
+  .RetroCard__grip,
+  .RetroCard__delete {
     opacity: 1;
   }
-  .RetroCard .textbox {
-    display: block;
-    width: 100%;
-    background-color: transparent;
-    border: 0;
-    border-radius: 5px;
-    padding: 0.25rem;
-    margin-bottom: 0.5rem;
-    resize: none;
+}
+
+/* --------------------------------------------------------------------------
+   Drag states
+   -------------------------------------------------------------------------- */
+
+.RetroCard__slot {
+  position: relative;
+}
+
+.RetroCard--dragging {
+  opacity: 0.4;
+}
+
+.RetroCard--dragging .RetroCard__grip,
+.RetroCard--dragging .RetroCard__delete {
+  opacity: 0;
+}
+
+.RetroCard--overlay {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-lg);
+  transform: rotate(1.5deg);
+  cursor: grabbing;
+}
+
+.RetroCard--overlay .RetroCard__grip {
+  opacity: 1;
+  color: var(--text-strong);
+}
+
+.RetroCategory--over {
+  background-color: #e7eaf0;
+  border-color: var(--accent);
+}
+
+.RetroCategory--over .RetroCategory__empty {
+  border-color: var(--accent);
+  color: var(--text-body);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .RetroCard--overlay {
+    transform: none;
   }
-  .RetroCard .textbox:hover {
-    background: hsla(0, 0%, 100%, 0.2)
-      url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZD0iTTkgNS4zTDEwLjYgN2wtNC4xIDQuMS0xLjYtMS42TDkgNS4zem0yLjgtLjNsLS43LS43Yy0uMy0uMy0uNy0uMy0xIDBsLS43LjZMMTEgNi42bC44LS44Yy4zLS4zLjMtLjYgMC0uOHpNNCAxMS44YzAgLjEuMS4yLjIuMmwxLjgtLjUtMS42LTEuNi0uNCAxLjl6IiBmaWxsPSIjZmZmIi8+PC9zdmc+")
-      100% 0/27px no-repeat;
-    cursor: pointer;
+
+  * {
+    transition-duration: 0.01ms !important;
   }
-  .RetroCard .textbox:active {
-    background-color: hsla(0, 0%, 100%, 0.25);
-  }
-  .RetroCard .textbox:active,
-  .RetroCard .textbox:focus {
-    background-color: #fff;
-    color: #333;
-    cursor: auto;
-  }
-  .RetroCard .textbox.invalid {
-    background-color: #fff;
-  }
-  .RetroCard .textbox.invalid::-webkit-input-placeholder {
-    color: #e91e63;
-    opacity: 1;
-  }
-  .RetroCard .textbox.invalid::-moz-placeholder {
-    color: #e91e63;
-    opacity: 1;
-  }
-  .RetroCard .textbox.invalid:-ms-input-placeholder {
-    color: #e91e63;
-    opacity: 1;
-  }
-  .RetroCard .textbox.invalid:-moz-placeholder {
-    color: #e91e63;
-    opacity: 1;
-  }
-  
+}
