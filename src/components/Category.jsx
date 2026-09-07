@@ -3,7 +3,6 @@ import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import Item from './Item.jsx';
 import { BoardContext } from '../contexts/BoardContext';
-import { CATEGORIES } from '../boardColumns';
 
 const Category = ({ title, items, categoryKey }) => {
   const { addItem } = useContext(BoardContext);

@@ -24,6 +24,9 @@ export default [
     plugins: { 'react-refresh': reactRefresh },
     rules: {
       'react/jsx-no-target-blank': 'off',
+      /* React 19 ignores propTypes on function components, so requiring them
+         would only enforce code that never runs. */
+      'react/prop-types': 'off',
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
