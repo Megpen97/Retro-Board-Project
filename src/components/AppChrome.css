@@ -1,0 +1,118 @@
+/* ==========================================================================
+   Page chrome: the bar above the board and the footer below it
+   ========================================================================== */
+
+.AppBar__inner,
+.AppFooter__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+/* Grows to fill the viewport so the footer stays put on a near-empty board. */
+.AppMain {
+  flex: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Bar
+   -------------------------------------------------------------------------- */
+
+.AppBar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: var(--bar-height);
+  background-color: var(--surface-raised);
+  border-bottom: 1px solid var(--border);
+  transition: box-shadow var(--transition), border-color var(--transition);
+}
+
+.AppBar__inner {
+  height: 100%;
+}
+
+/* Applied once the page scrolls, so the lift means "content is passing under
+   me" rather than being permanent decoration. */
+.AppBar--lifted {
+  border-bottom-color: transparent;
+  box-shadow: var(--shadow-bar);
+}
+
+.AppBar__name {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-strong);
+  font-size: 0.9375rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.AppBar__count {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  background-color: var(--surface-sunken);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------------- */
+
+.AppFooter {
+  margin-top: auto; /* pinned to the bottom on short boards */
+  border-top: 1px solid var(--border);
+  padding: var(--space-4) 0;
+}
+
+.AppFooter__note {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+}
+
+.AppFooter__reset {
+  flex: 0 0 auto;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition: background-color var(--transition), color var(--transition),
+    border-color var(--transition);
+}
+
+.AppFooter__reset:hover:not(:disabled) {
+  background-color: rgba(225, 29, 72, 0.08);
+  border-color: rgba(225, 29, 72, 0.2);
+  color: var(--danger);
+}
+
+.AppFooter__reset:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* --------------------------------------------------------------------------
+   Narrow screens
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 30rem) {
+  .AppFooter__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+}

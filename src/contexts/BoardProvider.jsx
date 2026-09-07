@@ -71,6 +71,12 @@ export const BoardProvider = ({ children }) => {
   };
 
 
+  /**
+   * Empties every column. The persistence effect writes the cleared board to
+   * localStorage on the next render, so there is nothing to clear by hand.
+   */
+  const clearBoard = () => setBoardState(emptyBoard());
+
   const moveCard = (itemId, toCategory, toIndex) => {
     setBoardState((prevState) => {
       const fromCategory = CATEGORIES.find((category) =>
@@ -95,9 +101,15 @@ export const BoardProvider = ({ children }) => {
     });
   };
 
+  /* Derived once here so the bar and the footer do not each recount. */
+  const totalCards = CATEGORIES.reduce(
+    (total, category) => total + boardState[category].length,
+    0
+  );
+
   return (
     <BoardContext.Provider
-      value={{ boardState, addItem, updateItemText, deleteItem, moveCard }}
+      value={{ boardState, addItem, updateItemText, deleteItem, moveCard, clearBoard, totalCards }}
     >
       {children}
     </BoardContext.Provider>

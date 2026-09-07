@@ -61,8 +61,7 @@ const RetroBoard = () => {
       <header className="RetroBoard__header">
         <h1 className="RetroBoard__title">Retro Board</h1>
         <p className="RetroBoard__subtitle">
-          Drag cards between columns to move them. Everything saves to this browser
-          automatically.
+          Drag cards between columns to move them.
         </p>
       </header>
 

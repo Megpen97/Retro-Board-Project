@@ -40,6 +40,11 @@
 
   --ring: 0 0 0 3px rgba(99, 102, 241, 0.35);
 
+  /* Page frame */
+  --page-max: 1200px;
+  --bar-height: 3.5rem;
+  --shadow-bar: 0 1px 3px rgba(16, 24, 40, 0.08), 0 4px 12px rgba(16, 24, 40, 0.05);
+
   --transition: 140ms ease;
 
   font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -68,10 +73,25 @@ body {
 }
 
 body {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
   min-width: 320px;
-  background-color: var(--surface-page);
   color: var(--text-body);
+
+  /* A soft ground rather than a flat fill, so the sunken columns read as sunken.
+     The colour is fixed to the viewport so it does not repeat down a long board. */
+  background-color: var(--surface-page);
+  background-image: linear-gradient(180deg, var(--surface-raised) 0%, var(--surface-page) 22rem);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* body's flex context stops at its only child, so #root carries the column. */
+#root {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
 }
 
 h1,
