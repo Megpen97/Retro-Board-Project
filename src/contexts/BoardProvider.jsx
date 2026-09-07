@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { BoardContext } from './BoardContext';
 import { CATEGORIES } from '../boardColumns';
 
@@ -114,8 +113,4 @@ export const BoardProvider = ({ children }) => {
       {children}
     </BoardContext.Provider>
   );
-};
-
-BoardProvider.propTypes = {
-  children: PropTypes.node.isRequired,
 };

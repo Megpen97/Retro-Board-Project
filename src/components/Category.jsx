@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useContext } from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
@@ -47,17 +46,6 @@ const Category = ({ title, items, categoryKey }) => {
       </button>
     </section>
   );
-};
-
-Category.propTypes = {
-  title: PropTypes.string.isRequired,
-  items: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      text: PropTypes.string,
-    })
-  ).isRequired,
-  categoryKey: PropTypes.oneOf(CATEGORIES).isRequired,
 };
 
 export default Category;

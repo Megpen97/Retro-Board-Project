@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useContext } from 'react';
 import { FaTrash, FaGripVertical } from 'react-icons/fa';
 import { BoardContext } from '../contexts/BoardContext';
@@ -54,17 +53,6 @@ const Card = ({ item, handleRef, handleProps, isDragging, isOverlay }) => {
       </div>
     </article>
   );
-};
-
-Card.propTypes = {
-  item: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    text: PropTypes.string,
-  }).isRequired,
-  handleRef: PropTypes.func,
-  handleProps: PropTypes.object,
-  isDragging: PropTypes.bool,
-  isOverlay: PropTypes.bool,
 };
 
 export default Card;

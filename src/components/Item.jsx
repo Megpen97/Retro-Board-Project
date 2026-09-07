@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import Card from './Card.jsx';
@@ -32,13 +31,6 @@ const Item = ({ item }) => {
       />
     </div>
   );
-};
-
-Item.propTypes = {
-  item: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    text: PropTypes.string,
-  }).isRequired,
 };
 
 export default Item;
